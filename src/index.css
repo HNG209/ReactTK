@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 .container {
-  @apply h-[900px] grid grid-cols-[2fr_10fr] grid-rows-[2fr_10fr] gap-[10px] bg-[#2196F3] p-[10px];
+  @apply h-[900px] grid grid-cols-[2fr_10fr] grid-rows-[1fr_10fr] gap-[10px] bg-[#2196F3] p-[10px];
   grid-template-areas:
     "menu header"
     "menu content"
