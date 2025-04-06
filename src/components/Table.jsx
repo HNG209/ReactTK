@@ -16,6 +16,18 @@ export default function Table() {
       })
   }, [])
 
+  async function handleItemChange(row)  {
+    const response = await fetch(`https://67da34cd35c87309f52b67a2.mockapi.io/customer/${row.id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(row),
+    });
+    const result = await response.json();
+    setData((prev) => prev.map((item) => (item.id === row.id ? result : item)));
+  }
+
   const handleEditClick = (row) => {
     setEditRowId(row.id);
     setEditedRow({ ...row });
@@ -25,7 +37,7 @@ export default function Table() {
     setData((prev) =>
       prev.map((item) => (item.id === editRowId ? editedRow : item))
     );
-    console.log(editedRow);
+    handleItemChange(editedRow);
     setEditRowId(null);
   };
 
