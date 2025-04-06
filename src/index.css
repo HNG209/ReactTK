@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 .container {
-  @apply h-[900px] grid grid-cols-[2fr_10fr] grid-rows-[1fr_10fr] gap-[10px] bg-[#2196F3] p-[10px];
+  @apply h-[900px] grid grid-cols-[2fr_10fr] grid-rows-[1fr_10fr] gap-[2px] bg-gray-200;
   grid-template-areas:
     "menu header"
     "menu content"
@@ -13,14 +13,15 @@
 }
 
 .container > div.header {
-  @apply text-center flex items-center justify-between w-full;
+  @apply text-center flex items-center justify-between w-full bg-white;
   grid-area: header;
 }
 
 .container > div.menu {
+  @apply bg-white;
   grid-area: menu;
 }
 .container > div.content {
-  @apply flex flex-col w-full;
+  @apply flex flex-col w-full bg-white;
   grid-area: content;
 }
