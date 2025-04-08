@@ -9,10 +9,10 @@ import dashboard from '../assets/dashboard.png'
 import Table from "./Table"
 import Header from "./Header"
 import { useContext, useState } from "react"
-import useData, { DataContext } from "./Table"
+import { useAddRow } from "../DataProvider"
 
 export default function Dashboard() {
-    const addRow = useContext(DataContext)
+    const addRow = useAddRow();
     const [isOpen, setIsOpen] = useState(false);
     const [formData, setFormData] = useState({
         name: "",
@@ -56,8 +56,7 @@ export default function Dashboard() {
 
             const data = await response.json();
             //add form data to table
-
-            console.log('Order added:', data);
+            addRow(data);
         } catch (error) {
             console.error('Error adding order:', error);
         }
@@ -102,7 +101,6 @@ export default function Dashboard() {
                     <div className="fixed inset-0 z-50 flex items-center justify-center">
                         {/* Backdrop */}
                         <div className="fixed inset-0 bg-black bg-opacity-30 transition-opacity duration-300" onClick={closeModal}></div>
-
 
                         {/* Modal box */}
                         <div className="bg-white rounded-xl p-6 w-full max-w-lg shadow-lg relative z-10 transform transition-all duration-300 scale-95 opacity-0 animate-fade-in-scale">

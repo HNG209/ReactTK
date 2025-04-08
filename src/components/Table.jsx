@@ -1,37 +1,13 @@
-import React, { createContext, useState, useEffect, Children } from 'react';
+import React, { useState } from 'react';
 import DataTable from 'react-data-table-component';
 import pen from '../assets/pen.png';
-
-export const DataContext = createContext();
+import { useChangeData, useDataContext } from '../DataProvider';
 
 export default function Table() {
-  const [data, setData] = useState([]);
+  const data = useDataContext();
+  const changeDataContext = useChangeData();
   const [editRowId, setEditRowId] = useState(null);
   const [editedRow, setEditedRow] = useState({});
-
-  useEffect(() => {
-    fetch('https://67da34cd35c87309f52b67a2.mockapi.io/customer')
-      .then((response) => response.json())
-      .then((data) => {
-        setData(data);
-      });
-  }, []);
-
-  const addRow = (row) => {
-    setData((prev) => [...prev, row]);
-  }
-
-  async function handleItemChange(row) {
-    const response = await fetch(`https://67da34cd35c87309f52b67a2.mockapi.io/customer/${row.id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(row),
-    });
-    const result = await response.json();
-    setData((prev) => prev.map((item) => (item.id === row.id ? result : item)));
-  }
 
   const handleEditClick = (row) => {
     setEditRowId(row.id);
@@ -39,10 +15,7 @@ export default function Table() {
   };
 
   const handleSaveClick = () => {
-    setData((prev) =>
-      prev.map((item) => (item.id === editRowId ? editedRow : item))
-    );
-    handleItemChange(editedRow);
+    changeDataContext(editedRow);
     setEditRowId(null);
   };
 
@@ -148,19 +121,17 @@ export default function Table() {
   ];
 
   return (
-    <DataContext.Provider value={addRow}>
-      <div>
-        <DataTable
-          columns={columns}
-          data={data}
-          pagination
-          striped
-          highlightOnHover
-          pointerOnHover
-          responsive
-          selectableRows
-        />
-      </div>
-    </DataContext.Provider>
+    <div>
+      <DataTable
+        columns={columns}
+        data={data}
+        pagination
+        striped
+        highlightOnHover
+        pointerOnHover
+        responsive
+        selectableRows
+      />
+    </div>
   );
 }
