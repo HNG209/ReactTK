@@ -1,4 +1,6 @@
-export default function Card({ title, total, percentage, color, icon }) {
+import React from 'react';
+
+function Card({ title, total, percentage, color, icon }) {
     // Default color to 'blue' if not provided
     color = color || 'blue';
 
@@ -35,3 +37,5 @@ export default function Card({ title, total, percentage, color, icon }) {
         </div>
     );
 }
+
+export default React.memo(Card);

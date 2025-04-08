@@ -62,6 +62,7 @@ export default function DataProvider({ children }) {
         });
         const result = await response.json();
         setData((prev) => [...prev, result]);
+        alert('Row added successfully!');
     }
 
     async function changeData(row) {
@@ -74,6 +75,7 @@ export default function DataProvider({ children }) {
         });
         const result = await response.json();
         setData((prev) => prev.map((item) => (item.id === row.id ? result : item)));
+        alert('Row updated successfully!');
     }
 
     return (
