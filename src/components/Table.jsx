@@ -1,7 +1,8 @@
+import React, { createContext, useState, useEffect, Children } from 'react';
 import DataTable from 'react-data-table-component';
 import pen from '../assets/pen.png';
-import { useState, useEffect } from 'react';
 
+export const DataContext = createContext();
 
 export default function Table() {
   const [data, setData] = useState([]);
@@ -13,10 +14,14 @@ export default function Table() {
       .then((response) => response.json())
       .then((data) => {
         setData(data);
-      })
-  }, [])
+      });
+  }, []);
 
-  async function handleItemChange(row)  {
+  const addRow = (row) => {
+    setData((prev) => [...prev, row]);
+  }
+
+  async function handleItemChange(row) {
     const response = await fetch(`https://67da34cd35c87309f52b67a2.mockapi.io/customer/${row.id}`, {
       method: 'PUT',
       headers: {
@@ -48,8 +53,8 @@ export default function Table() {
   const columns = [
     {
       name: 'Customer Name',
-      selector: row => row.name,
-      cell: row =>
+      selector: (row) => row.name,
+      cell: (row) =>
         editRowId === row.id ? (
           <input
             value={editedRow.name}
@@ -63,8 +68,8 @@ export default function Table() {
     },
     {
       name: 'Company',
-      selector: row => row.company,
-      cell: row =>
+      selector: (row) => row.company,
+      cell: (row) =>
         editRowId === row.id ? (
           <input
             value={editedRow.company}
@@ -77,8 +82,8 @@ export default function Table() {
     },
     {
       name: 'Order Value',
-      selector: row => row.orderValue,
-      cell: row =>
+      selector: (row) => row.orderValue,
+      cell: (row) =>
         editRowId === row.id ? (
           <input
             value={editedRow.orderValue}
@@ -91,8 +96,8 @@ export default function Table() {
     },
     {
       name: 'Order Date',
-      selector: row => row.orderDate,
-      cell: row =>
+      selector: (row) => row.orderDate,
+      cell: (row) =>
         editRowId === row.id ? (
           <input
             value={editedRow.orderDate}
@@ -105,8 +110,8 @@ export default function Table() {
     },
     {
       name: 'Status',
-      selector: row => row.status,
-      cell: row =>
+      selector: (row) => row.status,
+      cell: (row) =>
         editRowId === row.id ? (
           <select
             value={editedRow.status}
@@ -123,7 +128,7 @@ export default function Table() {
     },
     {
       name: 'Actions',
-      cell: row =>
+      cell: (row) =>
         editRowId === row.id ? (
           <button
             onClick={handleSaveClick}
@@ -132,22 +137,30 @@ export default function Table() {
             Save
           </button>
         ) : (
-          <img onClick={() => handleEditClick(row)} src={pen} className='w-5 h-5' alt="" />
+          <img
+            onClick={() => handleEditClick(row)}
+            src={pen}
+            className="w-5 h-5"
+            alt=""
+          />
         ),
     },
   ];
+
   return (
-    <div>
-      <DataTable
-        columns={columns}
-        data={data}
-        pagination
-        striped
-        highlightOnHover
-        pointerOnHover
-        responsive
-        selectableRows
-      />
-    </div>
-  )
+    <DataContext.Provider value={addRow}>
+      <div>
+        <DataTable
+          columns={columns}
+          data={data}
+          pagination
+          striped
+          highlightOnHover
+          pointerOnHover
+          responsive
+          selectableRows
+        />
+      </div>
+    </DataContext.Provider>
+  );
 }
